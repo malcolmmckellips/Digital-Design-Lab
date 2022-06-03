@@ -1,0 +1,80 @@
+ void circular_buff_test(void){
+	 bool buff_empty;
+	 int test1_len = 50;
+	 int test2_len = 25;
+	 int test3_len = 5;
+
+	 // Why this 0 initialize of read and write pointer?
+	 // Student Response:
+	 //
+	 ble_cbuf.read_ptr = 0;
+	 ble_cbuf.write_ptr = 0;
+
+	 // Why do none of these test strings contain a 0?
+	 // Student Response:
+	 //
+	 for (int i = 0;i < test1_len; i++){
+		 test_struct.test_str[0][i] = i+1;
+	 }
+	 for (int i = 0;i < test2_len; i++){
+		 test_struct.test_str[1][i] = i + 20;
+	 }
+	 for (int i = 0;i < test3_len; i++){
+		 test_struct.test_str[2][i] = i +  35;
+	 }
+
+	 // Why is there only one push to the circular buffer at this stage of the test
+	 // Student Response:
+	 //
+	 ble_circ_push(&test_struct.test_str[0][0]);
+
+	 // Why is the expected buff_empty test = false?
+	 // Student Response:
+	 //
+	 buff_empty = ble_circ_pop(CIRC_TEST);
+	 EFM_ASSERT(buff_empty == false);
+	 for (int i = 0; i < test1_len; i++){
+		 EFM_ASSERT(test_struct.test_str[0][i] == test_struct.result_str[i]);
+	 }
+
+	 // What does this next push on the circular buffer test?
+	 // Student Response:
+
+	 ble_circ_push(&test_struct.test_str[1][0]);
+
+	 // What does this next push on the circular buffer test?
+	 // Student Response:
+	 ble_circ_push(&test_struct.test_str[2][0]);
+
+
+	 // Why is the expected buff_empty test = false?
+	 // Student Response:
+	 //
+	 buff_empty = ble_circ_pop(CIRC_TEST);
+	 EFM_ASSERT(buff_empty == false);
+	 for (int i = 0; i < test2_len; i++){
+		 EFM_ASSERT(test_struct.test_str[1][i] == test_struct.result_str[i]);
+	 }
+
+	 // Why is the expected buff_empty test = false?
+	 // Student Response:
+	 //
+	 buff_empty = ble_circ_pop(CIRC_TEST);
+	 EFM_ASSERT(buff_empty == false);
+	 for (int i = 0; i < test3_len; i++){
+		 EFM_ASSERT(test_struct.test_str[2][i] == test_struct.result_str[i]);
+	 }
+
+	 // Using these three writes and pops to the circular buffer, what other test
+	 // could we develop to better test out the circular buffer?
+	 // Student Response:
+
+
+	 // Why is the expected buff_empty test = true?
+	 // Student Response:
+	 //
+	 buff_empty = ble_circ_pop(CIRC_TEST);
+	 EFM_ASSERT(buff_empty == true);
+	 ble_write("\nPassed Circular Buffer Test\n");
+
+ }
